@@ -5,7 +5,7 @@ The purpose of this service is to provide an easy way to retrieve equivalent map
 
  - Mapping DBpedia to Wikidata
  - Mapping Freebase to Wikidata
- - Mapping ImageNet/WordNet8 to Wikidata
+ - Mapping ImageNet/WordNet to Wikidata
  
 The basic functionality of the API is to receive a resource identifier as input and the system will return any output resources found in XML or JSON format.
 
