@@ -14,21 +14,31 @@ API Usage
 - Mapping DBpedia to Wikidata:
 
 http://localhost:8080/wikidataMapper/services/mapping?resource=http://dbpedia.org/resource/Tim_Berners-Lee&format=json
+
 http://localhost:8080/wikidataMapper/services/mapping?resource=dbpedia:Tim_Berners-Lee
+
 http://localhost:8080/wikidataMapper/services/mapping?resource=Tim_Berners-Lee&format=json
+
 http://localhost:8080/wikidataMapper/services/mapping?resource=http://dbpedia.org/ontology/country
+
 http://localhost:8080/wikidataMapper/services/mapping?resource=dbpedia:Person&format=json
 
  - Mapping Freebase to Wikidata
  
 http://localhost:8080/wikidataMapper/services/mapping?resource=http://rdf.freebase.com/ns/m.07d5b&source=freebase&format=json
+
 http://localhost:8080/wikidataMapper/services/mapping?resource=freebase:m.07d5b&source=freebase
+
 http://localhost:8080/wikidataMapper/services/mapping?resource=/m/07d5b&source=freebase&format=json
+
 http://localhost:8080/wikidataMapper/services/mapping?resource=m.0dgw9r&source=freebase
 
 - Mapping ImageNet to Wikidata
 
 http://localhost:8080/wikidataMapper/services/mapping?resource=n00017222&source=imagenet&format=json
+
 http://localhost:8080/wikidataMapper/services/mapping?resource=n00017222&source=imagenet
+
 http://localhost:8080/wikidataMapper/services/mapping?resource=n00015388&source=imagenet&format=json
+
 http://localhost:8080/wikidataMapper/services/mapping?resource=n00007846&source=imagenet&format=json
