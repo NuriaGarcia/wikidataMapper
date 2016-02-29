@@ -6,6 +6,7 @@ The purpose of this service is to provide an easy way to retrieve equivalent map
  - Mapping DBpedia to Wikidata
  - Mapping Freebase to Wikidata
  - Mapping ImageNet/WordNet to Wikidata
+ - Mapping Wikipedia to Wikidata
  
 The basic functionality of the API is to receive a resource identifier as input and the system will return any output resources found in XML or JSON format.
 
@@ -42,3 +43,11 @@ http://localhost:8080/wikidataMapper/services/mapping?resource=n00017222&source=
 http://localhost:8080/wikidataMapper/services/mapping?resource=n00015388&source=imagenet&format=json
 
 http://localhost:8080/wikidataMapper/services/mapping?resource=n00007846&source=imagenet&format=json
+
+- Mapping Wikipedia to Wikidata
+
+http://localhost:8080/wikidataMapper/services/mapping?resource=https://en.wikipedia.org/w/index.php?title=Criticism_of_the_United_States_government&diff=707311006&oldid=706767407&source=wikipedia
+
+http://localhost:8080/wikidataMapper/services/mapping?resource=https://en.wikipedia.org/w/index.php?title=Criticism_of_the_United_States_government&source=wikipedia&format=json
+
+http://localhost:8080/wikidataMapper/services/mapping?resource=http://en.wikipedia.org/wiki/Criticism_of_the_United_States_government&source=wikipedia&format=json

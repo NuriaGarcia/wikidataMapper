@@ -43,6 +43,9 @@ public class InputResource {
 		if(source_string.equals("imagenet")){
 			r.executeQueryImageNet(context, resource_string);
 		}
+		if(source_string.equals("wikipedia")){
+			r.executeQueryWikipedia("http://live.dbpedia.org/sparql", resource_string);
+		}
 
 		return Response
 				// Set the status, entity and media type of the response.
@@ -52,7 +55,7 @@ public class InputResource {
 }
 
 //Examples DBpedia
-//http://lab.expertsystem.com/wikidataMapper/services/mapping?resource=Madrid&format=json
+//http://expertsystem:8080/wikidataMapper/services/mapping?resource=Madrid&format=json
 //http://localhost:8080/wikidataMapper/services/mapping?resource=Madrid
 //http://localhost:8080/wikidataMapper/services/mapping?resource=http://dbpedia.org/resource/Madrid&format=json
 //http://localhost:8080/wikidataMapper/services/mapping?resource=dbpedia:Madrid
@@ -70,3 +73,6 @@ public class InputResource {
 
 //Examples ImageNet
 //http://localhost:8080/wikidataMapper/services/mapping?resource=n02935658&source=imagenet
+
+//Examples Wikipedia
+//http://localhost:8080/wikidataMapper/services/mapping?resource=https://en.wikipedia.org/w/index.php?title=Criticism_of_the_United_States_government&diff=707311006&oldid=706767407&source=wikipedia
