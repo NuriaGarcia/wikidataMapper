@@ -35,13 +35,14 @@ public class InputResource {
 
 		Resource r = new Resource();	
 		if(source_string.equals("dbpedia")){
-			r.executeQueryDBpedia("http://live.dbpedia.org/sparql", resource_string, "");
+			r.executeQueryDBpedia("http://live.dbpedia.org/sparql", resource_string, "", false);
 		}
 		if(source_string.equals("freebase")){
 			r.executeQueryFreebase("https://wdq.wmflabs.org/api", resource_string);
 		}
 		if(source_string.equals("imagenet")){
-			r.executeQueryImageNet(context, resource_string);
+			//r.executeQueryImageNet(context, resource_string);
+			r.executeQueryImageNetBabelNet(context, resource_string);
 		}
 		if(source_string.equals("wikipedia")){
 			r.executeQueryWikipedia("http://live.dbpedia.org/sparql", resource_string);

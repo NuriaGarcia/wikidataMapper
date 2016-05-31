@@ -47,7 +47,7 @@ public class Resource {
 		this.data = data;
 	}
 
-	public void executeQueryDBpedia(String endpoint, String input, String q){		
+	public void executeQueryDBpedia(String endpoint, String input, String q, boolean is_subject){		
 		String query_string = q;	
 		String input2 = "";
 		this.data = new ArrayList<DataResource>();
@@ -83,7 +83,7 @@ public class Resource {
 		String property_resource;
 		while (results.hasNext()) {			
 			soln1 = results.nextSolution();
-			if(!q.equals("")){
+			if(is_subject){
 				resource =soln1.get("s").toString();
 			}
 			wikidata_resource = soln1.get("wikidata").toString();
@@ -225,8 +225,63 @@ public class Resource {
 				String filter = "FILTER (regex(str(?wikidata), '^http://wikidata') || regex(str(?wikidata), '^http://www.wikidata'))";
 				query_string += "?s ?p ?wikidata." + filter + "}";
 
-				this.executeQueryDBpedia("http://live.dbpedia.org/sparql", "", query_string);				
+				this.executeQueryDBpedia("http://live.dbpedia.org/sparql", "", query_string, true);				
 			}						
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void executeQueryImageNetBabelNet(ServletContext context, String input){
+		InputStream is = context.getResourceAsStream("/WEB-INF/resources/wn30map31nouns.properties");
+		Properties props = new Properties();
+
+		try {
+			props.load(is);
+			is.close();
+
+			String lemonID = props.getProperty(input);
+			lemonID = "1" + lemonID + "-n";
+
+			if(lemonID != null){
+				//Call to BabelNet in order to obtain the Dbpedia entries from the ID
+				String endpoint_BabelNet = "http://babelnet.org/sparql/";
+				String query_BabelNet = "PREFIX skos: <http://www.w3.org/2004/02/skos/core#> "
+						+ "PREFIX lemon-WordNet31:<http://wordnet-rdf.princeton.edu/wn31/> "
+						+ "SELECT ?entries WHERE { "
+						+ "    ?s skos:exactMatch  lemon-WordNet31:" + lemonID + " . "
+						+ "    ?s skos:exactMatch ?entries "
+						+ "} LIMIT 30";
+
+				ResultSet results_BabelNet = null;		
+				Query q_BabelNet = QueryFactory.create(query_BabelNet, Syntax.syntaxARQ);
+				QueryExecution qexec = QueryExecutionFactory.sparqlService(endpoint_BabelNet, q_BabelNet);
+				results_BabelNet = qexec.execSelect();
+
+				///Building the query to call to Dbpedia
+				String filter = "FILTER (regex(str(?wikidata), '^http://wikidata') || regex(str(?wikidata), '^http://www.wikidata'))";
+				String query_string = "SELECT DISTINCT * WHERE { ";				
+				/////////////////////////////////////////////////////
+
+				QuerySolution soln1;
+				boolean is_dbpedia = false;
+				while (results_BabelNet.hasNext()) {			
+					soln1 = results_BabelNet.nextSolution();
+					String entry = soln1.get("entries").toString();
+
+					if(entry.startsWith("http://dbpedia.org")){
+						is_dbpedia = true;
+						query_string += "{<" + entry + "> ?p ?wikidata. } UNION ";
+					}
+				}
+				if(is_dbpedia){
+					query_string = query_string.substring(0, query_string.lastIndexOf('}')+1);
+					query_string += " " + filter + "}";
+
+					this.executeQueryDBpedia("http://live.dbpedia.org/sparql", "", query_string, false);
+				}					
+			}
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -243,15 +298,15 @@ public class Resource {
 			String concept = matcher.group(0);
 			concept = concept.substring(concept.indexOf("=")+1);
 			url = input.substring(0, input.lastIndexOf('/')) + "iki/" + concept;
-			
+
 		}
 		url = url.replace("https", "http");
-		
+
 		String foaf = "<http://xmlns.com/foaf/0.1/isPrimaryTopicOf>";
 		String owl = "<http://www.w3.org/2002/07/owl#sameAs>";
 		String filter = "FILTER (regex(str(?wikidata), '^http://wikidata') || regex(str(?wikidata), '^http://www.wikidata'))";
 		String query_string = "select distinct * where {?s " + foaf + " <" + url + ">. ?s " + owl + " ?wikidata. " + filter + "}";
-		
+
 		ResultSet results = null;		
 		Query query = QueryFactory.create(query_string, Syntax.syntaxARQ);
 		QueryExecution qexec = QueryExecutionFactory.sparqlService(endpoint, query);
@@ -264,7 +319,7 @@ public class Resource {
 			soln1 = results.nextSolution();
 			resource = soln1.get("s").toString();
 			wikidata_resource = soln1.get("wikidata").toString();
-				
+
 			DataResource dr = new DataResource();
 			dr.setResource(resource);
 			if(!data.contains(dr)){
